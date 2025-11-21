@@ -1,0 +1,107 @@
+pipeline {
+      agent any
+
+    environment {
+        APP_NAME = "atcha-home-system"
+    }
+
+    parameters {
+        booleanParam(name: 'SKIP_LINT', defaultValue: false, description: 'Set if the format & lint stage should be skipped')
+        booleanParam(name: 'SKIP_TESTS', defaultValue: false, description: 'Set if the test stage should be skipped')
+        booleanParam(name: 'SKIP_DEPLOY', defaultValue: false, description: 'Set if the deploy stage should be skipped')
+    }
+
+    stages {
+        stage('Checkout'){
+            steps {
+                checkout([
+                    $class: 'GitSCM'
+                    branches: [[name: 'main']]
+                    userRemoteConfigs: [[url: 'https://github.com/FreRare/ATCHA-core.git']]
+                    extensions: [[
+                        $class: 'SubmoduleOption',
+                        recursiveSubmodules: true,
+                        reference: '',
+                        trackingSubmodules: false
+                    ]]
+                ])
+            }
+        }
+
+        stage('Build') {
+            agent{
+                docker{
+                    image 'rust:latest'
+                    args '-u root:root'
+                }
+            }
+            steps {
+                sh 'cargo build --workspace --all-targets'
+            }
+        }
+
+        stage('Test'){
+            when{
+                expression { return !params.SKIP_TESTS}
+            }
+            agent{
+                docker{
+                    image 'rust:latest'
+                    args '-u root:root'
+                }
+            }
+            steps{
+                sh 'cargo test --workspace --all-targets --all-features'
+            }
+        }
+
+        stage('Format & Lint Check') {
+            when{
+                expression { return !params.SKIP_LINT}
+            }
+            agent{
+                docker{
+                    image 'rust:latest'
+                    args '-u root:root'
+                }
+            }
+            steps {
+                sh 'rustup component add rustfmt'
+                sh 'rustup component add clippy'
+                sh 'cargo fmt --all -- --check'
+                sh 'cargo clippy --workspace --all-targets --'
+            }
+        }
+
+        stage('Generate Docs') {
+            agent{
+                docker{
+                    image 'rust:latest'
+                    args '-u root:root'
+                }
+            }
+            steps {
+                sh 'cargo doc --workspace --no-deps'
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: 'target/doc/**', fingerprint: true
+                }
+            }
+        }
+
+        stage('Docker Build (Deploy)') {
+            when {
+                expression { return !params.SKIP_DEPLOY }
+            }
+            steps {
+                script {
+                    sh """
+                        docker build -t ${APP_NAME}:latest .
+                        docker tag ${APP_NAME}:latest ${APP_NAME}:latest
+                    """
+                }
+            }
+        }
+    }
+}
