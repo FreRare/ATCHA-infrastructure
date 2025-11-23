@@ -1,0 +1,9 @@
+# Terraform folder
+*/**/.terraform
+
+# Terraform generated files
+*/**/terraform.tfstate
+*/**/terraform.tfstate.backup
+*/**/.terraform.lock.hcl
+backend/terraform/tfplan
+
