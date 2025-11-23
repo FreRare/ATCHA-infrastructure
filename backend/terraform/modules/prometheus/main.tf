@@ -21,6 +21,12 @@ resource "docker_container" "prometheus" {
   name  = "prometheus"
   image = docker_image.prometheus.image_id
 
+  lifecycle {
+    ignore_changes = [
+      network_mode,
+    ]
+  }
+
   ports {
     ip       = "0.0.0.0"
     internal = 9090

@@ -19,6 +19,12 @@ resource "docker_network" "monitoring_network" {
     subnet  = "172.33.0.0/16"
     gateway = "172.33.0.1"
   }
+  lifecycle {
+    ignore_changes = [
+      options,
+      ipam_config,
+    ]
+  }
 }
 
 # App backend module

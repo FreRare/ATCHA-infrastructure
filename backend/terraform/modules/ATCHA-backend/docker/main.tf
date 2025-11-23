@@ -25,6 +25,12 @@ resource "docker_container" "ATCHA_app" {
   hostname = var.container_name
   image = docker_image.ATCHA_app.image_id
 
+  lifecycle {
+    ignore_changes = [
+      network_mode,
+    ]
+  }
+
   # Memory limit
   memory = var.memory_limit
 

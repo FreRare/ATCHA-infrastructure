@@ -12,9 +12,19 @@ resource "docker_image" "grafana" {
   name = "grafana/grafana:latest"
 }
 
+resource "docker_volume" "grafana_volume"{
+  name = "grafana_volume"
+}
+
 resource "docker_container" "grafana" {
   name  = "grafana"
   image = docker_image.grafana.image_id
+
+  lifecycle {
+    ignore_changes = [
+      network_mode,
+    ]
+  }
 
   networks_advanced {
     name         = var.network
@@ -32,6 +42,7 @@ resource "docker_container" "grafana" {
   ]
 
   volumes {
+    volume_name = docker_volume.grafana_volume.name
     host_path      = "/workspace/grafana/provisioning"
     container_path = "/etc/grafana/provisioning"
   }

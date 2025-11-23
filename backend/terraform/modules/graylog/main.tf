@@ -30,6 +30,12 @@ resource "docker_container" "mongodb" {
   name  = "mongodb"
   image = "mongo:5.0"
 
+  lifecycle {
+    ignore_changes = [
+      network_mode,
+    ]
+  }
+
   networks_advanced {
     name         = var.network
     ipv4_address = "172.33.0.10"
@@ -48,6 +54,12 @@ resource "docker_container" "datanode" {
   name     = "datanode"
   image    = var.datanode_image
   hostname = "datanode"
+
+  lifecycle {
+    ignore_changes = [
+      network_mode,
+    ]
+  }
 
   networks_advanced {
     name         = var.network
@@ -101,6 +113,12 @@ resource "docker_container" "graylog" {
   name     = "graylog"
   image    = var.graylog_image
   hostname = "server"
+
+  lifecycle {
+    ignore_changes = [
+      network_mode,
+    ]
+  }
 
   networks_advanced {
     name         = var.network
