@@ -58,7 +58,7 @@ variable "healthcheck" {
   })
   default = {
     enabled      = true
-    test = ["CMD", "curl", "-f", "http://localhost:33333/modules/all"]
+    test = ["CMD", "curl", "-f", "http://localhost:33333/healthcheck"]
     interval     = "30s"
     timeout      = "10s"
     retries      = 3

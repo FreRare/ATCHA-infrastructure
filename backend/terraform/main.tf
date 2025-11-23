@@ -26,7 +26,7 @@ module "ATCHA_backend_app" {
   source = "./modules/ATCHA-backend/docker"
 
   app_port       = var.app_port
-  container_name = "${var.project_name}-rust"
+  container_name = var.project_name
   network        = docker_network.monitoring_network.name
 
   depends_on = [docker_network.monitoring_network]

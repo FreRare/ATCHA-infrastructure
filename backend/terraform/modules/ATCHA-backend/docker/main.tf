@@ -21,9 +21,8 @@ resource "docker_image" "ATCHA_app" {
 
 # Application docker container
 resource "docker_container" "ATCHA_app" {
-  count    = var.container_count
-  name     = "${var.container_name}-${count.index + 1}"
-  hostname = "${var.container_name}-${count.index + 1}"
+  name     = var.container_name
+  hostname = var.container_name
   image = docker_image.ATCHA_app.image_id
 
   # Memory limit
@@ -35,14 +34,14 @@ resource "docker_container" "ATCHA_app" {
   # Ports configuration
   ports {
     internal = var.app_port
-    external = var.app_port + count.index
+    external = var.app_port
   }
 
   # Network settings
   networks_advanced {
     name         = var.network
-    aliases = ["${var.container_name}-${count.index + 1}"]
-    ipv4_address = "172.33.0.${20 + count.index}"
+    aliases = [var.container_name]
+    ipv4_address = "172.33.0.20"
   }
 
   # Custom health check settings
