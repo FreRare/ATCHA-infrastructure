@@ -19,6 +19,10 @@ resource "docker_image" "ATCHA_app" {
   }
 }
 
+resource "docker_volume" "atcha_app_data"{
+  name = "atcha_app_data"
+}
+
 # Application docker container
 resource "docker_container" "ATCHA_app" {
   name     = var.container_name
@@ -48,6 +52,12 @@ resource "docker_container" "ATCHA_app" {
     name         = var.network
     aliases = [var.container_name]
     ipv4_address = "172.33.0.20"
+  }
+
+  # Persistent volume mount
+  volumes {
+    volume_name = docker_volume.atcha_app_data.name
+    container_path = "/app"
   }
 
   # Custom health check settings

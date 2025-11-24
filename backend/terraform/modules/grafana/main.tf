@@ -16,6 +16,10 @@ resource "docker_volume" "grafana_volume"{
   name = "grafana_volume"
 }
 
+resource "docker_volume" "grafana_provisioning" {
+  name = "grafana_provisioning"
+}
+
 resource "docker_container" "grafana" {
   name  = "grafana"
   image = docker_image.grafana.image_id
@@ -42,8 +46,12 @@ resource "docker_container" "grafana" {
   ]
 
   volumes {
-    volume_name = docker_volume.grafana_volume.name
-    host_path      = "/workspace/grafana/provisioning"
+    volume_name = docker_volume.grafana_provisioning.name
     container_path = "/etc/grafana/provisioning"
+  }
+
+  volumes {
+    volume_name = docker_volume.grafana_volume.name
+    container_path = "/var/lib/grafana"
   }
 }

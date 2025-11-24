@@ -8,6 +8,10 @@ terraform {
   }
 }
 
+resource "docker_volume" "prometheus_data"{
+  name = "prometheus_data"
+}
+
 resource "docker_image" "prometheus" {
   name = "custom-prometheus:latest"
   build {
@@ -36,5 +40,10 @@ resource "docker_container" "prometheus" {
   networks_advanced {
     name         = var.network
     ipv4_address = "172.33.0.6"
+  }
+
+  volumes{
+    volume_name = docker_volume.prometheus_data.name
+    container_path = "/prometheus"
   }
 }
