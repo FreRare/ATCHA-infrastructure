@@ -57,7 +57,7 @@ resource "docker_container" "ATCHA_app" {
   # Persistent volume mount
   volumes {
     volume_name = docker_volume.atcha_app_data.name
-    container_path = "/app"
+    container_path = "/app/data"
   }
 
   # Custom health check settings
