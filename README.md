@@ -13,10 +13,9 @@ This process will create all docker images and start them using terraform, listi
 
 ## Bakcend
 
-This for now contains a terraform infrastructure to run the application and to be abel to monitor different metrics and logs.
+This for now contains a terraform infrastructure to run the application and to be able to monitor different metrics and logs.
 
 The infrastructure contains:
 - Prometheus (for system and API metrics collection)
 - Grafana (for great and stylish data visualization)
 - Graylog (for logging services)
-
