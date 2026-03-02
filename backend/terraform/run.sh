@@ -15,12 +15,6 @@ echo "========================================"
 # -------------------------------
 cd "${TF_DIR}"
 
-echo "🔍 Validating Terraform configuration..."
-terraform validate || {
-    echo "❌ Terraform validation failed!"
-    exit 1
-}
-
 echo "📌 Initializing Terraform..."
 terraform init -upgrade
 

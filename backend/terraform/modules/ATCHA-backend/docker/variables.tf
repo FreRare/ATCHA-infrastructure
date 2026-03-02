@@ -1,4 +1,4 @@
-variable "ATCHA_path" {
+variable "atcha_path" {
   description = "Path to the rust app folder if this submodule is loaded to the project folder"
   type        = string
   default     = "../../../../"
@@ -13,7 +13,7 @@ variable "dockerfile_path" {
 variable "container_name" {
   description = "Name of docker container"
   type        = string
-  default     = "ATCHA-backend"
+  default     = "atcha-controller"
 }
 
 variable "app_port" {
@@ -43,7 +43,7 @@ variable "memory_limit" {
 variable "restart_policy" {
   description = "Restart policy"
   type        = string
-  default     = "unless-stopped"  # always, on-failure, unless-stopped
+  default     = "always"  # always, on-failure, unless-stopped
 }
 
 variable "healthcheck" {
@@ -69,5 +69,5 @@ variable "healthcheck" {
 variable "network" {
   description = "Name of the docker network"
   type        = string
-  default     = "ATCHA-sample-network"
+  default     = "atcha-sample-network"
 }

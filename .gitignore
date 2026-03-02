@@ -2,8 +2,8 @@
 */**/.terraform
 
 # Terraform generated files
-*/**/terraform.tfstate
-*/**/terraform.tfstate.backup
+*/**/terraform.tfstate*
+terraform.tfstate*
 */**/.terraform.lock.hcl
 backend/terraform/tfplan
 

@@ -6,6 +6,27 @@ variable "project_name" {
   default     = "ATCHA-backend"
 }
 
+variable "enable_app" {
+  description = "Enable main application"
+  type = bool
+  default = true
+}
+variable "enable_prometheus" {
+  description = "Enable prometheus metrics"
+  type = bool
+  default = true
+}
+variable "enable_grafana" {
+  description = "Enable grafana server"
+  type = bool
+  default = true
+}
+variable "enable_graylog" {
+  description = "Enable graylog server"
+  type = bool
+  default = false
+}
+
 variable "environment" {
   description = "Name of the used environment"
   type        = string

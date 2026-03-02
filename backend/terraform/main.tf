@@ -28,7 +28,7 @@ resource "docker_network" "monitoring_network" {
 }
 
 # App backend module
-module "ATCHA_backend_app" {
+module "atcha_backend_app" {
   source = "./modules/ATCHA-backend/docker"
 
   app_port       = var.app_port
@@ -36,13 +36,19 @@ module "ATCHA_backend_app" {
   network        = docker_network.monitoring_network.name
 
   depends_on = [docker_network.monitoring_network]
+
+  count = var.enable_app ? 1 : 0
 }
 
 module "prometheus" {
   source = "./modules/prometheus"
 
   network        = docker_network.monitoring_network.name
-  ATCHA_app_name = module.ATCHA_backend_app.container_name
+  atcha_app_name = module.atcha_backend_app[0].container_name
+
+  depends_on = [docker_network.monitoring_network]
+
+  count = var.enable_prometheus ? 1 : 0
 }
 
 
@@ -52,6 +58,10 @@ module "grafana" {
 
   network        = docker_network.monitoring_network.name
   prometheus_url = "http://prometheus:9090"
+
+  depends_on = [docker_network.monitoring_network]
+
+  count = var.enable_grafana ? 1 : 0
 }
 
 # Graylog modul
@@ -61,6 +71,10 @@ module "graylog" {
   network                    = docker_network.monitoring_network.name
   graylog_password_secret    = var.graylog_password_secret
   graylog_root_password_sha2 = var.graylog_root_password_sha2
+
+  depends_on = [docker_network.monitoring_network]
+
+  count = var.enable_graylog ? 1 : 0
 }
 
 output "network_info" {
@@ -68,4 +82,10 @@ output "network_info" {
     network_id   = docker_network.monitoring_network.id
     network_name = docker_network.monitoring_network.name
   }
+}
+
+variable "enabled_modules" {
+  description = "Set of the loadable modules"
+  type = set(string)
+  default = ["atcha_backed_app", "prometheus", "grafana"]
 }

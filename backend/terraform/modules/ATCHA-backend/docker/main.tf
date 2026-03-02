@@ -9,7 +9,7 @@ terraform {
 }
 
 # Application docker image
-resource "docker_image" "ATCHA_app" {
+resource "docker_image" "atcha_app" {
   name = "atcha-backend:latest"
   build {
     context    = "../../../../"
@@ -24,10 +24,10 @@ resource "docker_volume" "atcha_app_data"{
 }
 
 # Application docker container
-resource "docker_container" "ATCHA_app" {
+resource "docker_container" "atcha_app" {
   name     = var.container_name
   hostname = var.container_name
-  image = docker_image.ATCHA_app.image_id
+  image = docker_image.atcha_app.image_id
 
   lifecycle {
     ignore_changes = [

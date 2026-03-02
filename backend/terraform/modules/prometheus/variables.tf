@@ -4,7 +4,7 @@ variable "network" {
   type        = string
 }
 
-variable "ATCHA_app_name" {
+variable "atcha_app_name" {
   description = "Name of the ATCHA application"
   type        = string
 }
