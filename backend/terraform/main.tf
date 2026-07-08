@@ -40,6 +40,19 @@ module "atcha_backend_app" {
   count = var.enable_app ? 1 : 0
 }
 
+# Frontend UI module
+module "atcha_frontend_app" {
+  source = "./modules/ATCHA-frontend/docker"
+
+  app_port     = var.frontend_port
+  network      = docker_network.monitoring_network.name
+  build_target = var.frontend_build_target
+
+  depends_on = [docker_network.monitoring_network]
+
+  count = var.enable_frontend ? 1 : 0
+}
+
 module "prometheus" {
   source = "./modules/prometheus"
 

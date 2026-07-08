@@ -11,6 +11,11 @@ variable "enable_app" {
   type = bool
   default = true
 }
+variable "enable_frontend" {
+  description = "Enable the frontend UI"
+  type = bool
+  default = true
+}
 variable "enable_prometheus" {
   description = "Enable prometheus metrics"
   type = bool
@@ -37,6 +42,18 @@ variable "app_port" {
   description = "Port used by the application"
   type        = number
   default     = 3333
+}
+
+variable "frontend_port" {
+  description = "Port used by the frontend UI"
+  type        = number
+  default     = 3434
+}
+
+variable "frontend_build_target" {
+  description = "Frontend Dockerfile target: 'prod' (static nginx bundle) or 'dev' (Expo dev server)"
+  type        = string
+  default     = "prod"
 }
 
 variable "sqlite_root_password" {
