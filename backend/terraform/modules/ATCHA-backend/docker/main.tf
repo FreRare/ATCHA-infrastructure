@@ -12,7 +12,7 @@ terraform {
 resource "docker_image" "atcha_app" {
   name = "atcha-backend:latest"
   build {
-    context    = "../../../../"
+    context    = var.atcha_path
     dockerfile = var.dockerfile_path
     tag = ["atcha-backend:latest"]
     no_cache   = true

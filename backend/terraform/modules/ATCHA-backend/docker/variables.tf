@@ -1,13 +1,13 @@
 variable "atcha_path" {
   description = "Path to the rust app folder if this submodule is loaded to the project folder"
   type        = string
-  default     = "../../../../"
+  default     = "../../../../backend"
 }
 
 variable "dockerfile_path" {
-  description = "Path to the rust app docker file if this submodule is loaded to the project folder"
+  description = "Path to the rust app docker file, relative to atcha_path"
   type        = string
-  default     = "../../../../Dockerfile"
+  default     = "Dockerfile"
 }
 
 variable "container_name" {
@@ -58,7 +58,7 @@ variable "healthcheck" {
   })
   default = {
     enabled      = true
-    test = ["CMD", "curl", "-f", "http://172.33.0.20:33333/healthcheck"]
+    test = ["CMD", "curl", "-f", "http://172.33.0.20:3333/healthcheck"]
     interval     = "30s"
     timeout      = "10s"
     retries      = 3
